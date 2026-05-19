@@ -13,7 +13,7 @@ const BASE_URL = 'http://jupiter.cloud.planittesting.com/#/contact';
  * 5. Run this test 5 times to ensure 100% pass rate
  * 
  * Run command: 
- * for ($i=1; $i -le 5; $i++) { npx playwright test contact-form-test-case-2.spec.ts --project=chromium }
+ * npx playwright test "Test case 2.spec.ts"--repeat-each=5 --workers=1
  */
 
 test.skip(({ browserName }) => browserName !== 'chromium', 'Run only on chromium');
