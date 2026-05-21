@@ -4,7 +4,7 @@ const BASE_URL = 'http://jupiter.cloud.planittesting.com/#/contact';
 
 test('Contact form validation - mandatory fields', async ({ page }) => {
   // Step 1 & 2: Navigate to contact page
-  await page.goto(BASE_URL);
+  await  page.goto(BASE_URL);
   
   // Step 3: Click submit button without filling fields
   await page.locator('a:has-text("Submit")').click();
