@@ -1,0 +1,60 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Show Node/npm versions
+        run: node -v && npm -v
+
+      - name: Debug info (runner)
+        run: |
+          echo "=== Runner info ==="
+          uname -a || true
+          echo "PWD: $(pwd)"
+          echo "Branch:" && git rev-parse --abbrev-ref HEAD || true
+          echo "Git status:" && git --no-pager status --porcelain || true
+          echo "Files:" && ls -la || true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=html
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test-results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 30
+
