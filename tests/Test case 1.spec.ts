@@ -31,3 +31,5 @@ test('Contact form validation - mandatory fields', async ({ page }) => {
   await page.waitForSelector('text=we appreciate your feedback', { timeout: 10000 });
   await expect(page.locator('text=we appreciate your feedback')).toBeVisible();
 });
+
+//test
