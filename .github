@@ -1,1 +1,62 @@
+import { Page, expect, Locator } from '@playwright/test';
 
+export class ContactPage {
+  private page: Page;
+
+  // Locators
+  private submitButton: Locator;
+  private forename: Locator;
+  private email: Locator;
+  private message: Locator;
+
+  private forenameError: Locator;
+  private emailError: Locator;
+  private messageError: Locator;
+
+  private successMessage: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+
+    this.submitButton = page.locator('a:has-text("Submit")');
+    this.forename = page.locator('input[placeholder="John"]');
+    this.email = page.locator('input[placeholder="john.example@planit.net.au"]');
+    this.message = page.locator('textarea[placeholder="Tell us about it.."]');
+
+    this.forenameError = page.locator('text=Forename is required');
+    this.emailError = page.locator('text=Email is required');
+    this.messageError = page.locator('text=Message is required');
+
+    this.successMessage = page.locator('text=we appreciate your feedback');
+  }
+
+  async navigate(): Promise<void> {
+    await this.page.goto('http://jupiter.cloud.planittesting.com/#/contact');
+  }
+
+  async submit(): Promise<void> {
+    await this.submitButton.click();
+  }
+
+  async fillMandatoryFields(name: string, email: string, msg: string): Promise<void> {
+    await this.forename.fill(name);
+    await this.email.fill(email);
+    await this.message.fill(msg);
+  }
+
+  async verifyErrorsVisible(): Promise<void> {
+    await expect(this.forenameError).toBeVisible();
+    await expect(this.emailError).toBeVisible();
+    await expect(this.messageError).toBeVisible();
+  }
+
+  async verifyErrorsGone(): Promise<void> {
+    await expect(this.forenameError).not.toBeVisible();
+    await expect(this.emailError).not.toBeVisible();
+    await expect(this.messageError).not.toBeVisible();
+  }
+
+  async verifySuccess(): Promise<void> {
+    await expect(this.successMessage).toBeVisible();
+  }
+}
