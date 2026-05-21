@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { ContactPage } from '../pages/contactPage';
+import { ContactPage } from './pages/contactPage';
 
 test('Contact form validation - mandatory fields (OOP)', async ({ page }) => {
   const contact = new ContactPage(page);
