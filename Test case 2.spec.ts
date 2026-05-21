@@ -36,4 +36,5 @@ test('Test case 2 - Contact form successful submission', async ({ page }) => {
   
   // Verify back link is available
   await expect(page.locator('text=« Back')).toBeVisible();
+
 });
