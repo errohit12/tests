@@ -1,14 +1,18 @@
 name: Playwright Tests
+
 on:
   push: {}
   pull_request: {}
   workflow_dispatch:
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
     env:
       CI: true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,16 +24,9 @@ jobs:
           cache: 'npm'
 
       - name: Show Node/npm versions
-        run: node -v && npm -v
-
-      - name: Debug info (runner)
         run: |
-          echo "=== Runner info ==="
-          uname -a || true
-          echo "PWD: $(pwd)"
-          echo "Branch:" && git rev-parse --abbrev-ref HEAD || true
-          echo "Git status:" && git --no-pager status --porcelain || true
-          echo "Files:" && ls -la || true
+          node -v
+          npm -v
 
       - name: Install dependencies
         run: npm ci
@@ -37,8 +34,17 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright test case 2 five times
-        run: npx playwright test TestCase2.spec.ts --repeat-each=5 --workers=1 --reporter=html
+      # Test Case 1 - Run 1 time
+      - name: Run TestCase1 once
+        run: npx playwright test tests/TestCase1.spec.ts --repeat-each=1 --workers=1
+
+      # Test Case 2 - Run 5 times
+      - name: Run TestCase2 five times
+        run: npx playwright test tests/TestCase2.spec.ts --repeat-each=5 --workers=1
+
+      # Test Case 3 - Run 1 time
+      - name: Run TestCase3 once
+        run: npx playwright test tests/TestCase3.spec.ts --repeat-each=1 --workers=1
 
       - name: Upload Playwright report
         if: always()
@@ -55,4 +61,3 @@ jobs:
           name: test-results
           path: test-results/
           retention-days: 30
-
