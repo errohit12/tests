@@ -28,3 +28,5 @@ test('Contact form validation - mandatory fields (OOP)', async ({ page }) => {
   await expect(contact.successMessage).toBeVisible({ timeout: 20000 });
   await expect(contact.successMessage).toContainText(/we appreciate your feedback/i);
 });
+
+// test
