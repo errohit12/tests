@@ -10,9 +10,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
-    env:
-      CI: true
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,27 +26,36 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # =========================
+      # =====================
       # TEST CASE 1
-      # =========================
+      # =====================
       - name: Run TestCase1
-        run: npx playwright test TestCase1.spec.ts --workers=1 --reporter=html --output=reports/test1
+        run: |
+          npx playwright test TestCase1.spec.ts --workers=1
+        env:
+          PLAYWRIGHT_HTML_REPORT: reports/test1
 
-      # =========================
+      # =====================
       # TEST CASE 2 (5 TIMES)
-      # =========================
+      # =====================
       - name: Run TestCase2 (5 times)
-        run: npx playwright test TestCase2.spec.ts --repeat-each=5 --workers=1 --reporter=html --output=reports/test2
+        run: |
+          npx playwright test TestCase2.spec.ts --repeat-each=5 --workers=1
+        env:
+          PLAYWRIGHT_HTML_REPORT: reports/test2
 
-      # =========================
+      # =====================
       # TEST CASE 3
-      # =========================
+      # =====================
       - name: Run TestCase3
-        run: npx playwright test TestCase3.spec.ts --workers=1 --reporter=html --output=reports/test3
+        run: |
+          npx playwright test TestCase3.spec.ts --workers=1
+        env:
+          PLAYWRIGHT_HTML_REPORT: reports/test3
 
-      # =========================
-      # UPLOAD ALL REPORTS
-      # =========================
+      # =====================
+      # UPLOAD REPORTS
+      # =====================
       - name: Upload Playwright reports
         if: always()
         uses: actions/upload-artifact@v4
